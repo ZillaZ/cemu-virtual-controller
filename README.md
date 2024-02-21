@@ -1,17 +1,23 @@
-CEMU Virtual Controller for Linux
+# CEMU Virtual Controller for Linux
 
-Este programa cria um controle virtual que o emulador CEMU é capaz de entender.
+This program creates a virtual controller that the CEMU emulator can understand.
 
-Uso:
+## Usage:
 
-Clone o repositório e execute o programa usando cargo.
+Clone the repository and execute the program using [cargo](https://www.rust-lang.org/learn/get-started). The user needs to be in the "input" group; otherwise, it will be necessary to run the program as root. It is also necessary for the uinput module to be activated.
 
-comando - cargo run --release
+```bash
+sudo modprobe uinput
+cargo run --release
+```
 
-Configuração:
+## Configuration:
 
-O programa utiliza uma váriavel de ambiente chamada "GAMEPAD_PROFILES". Seu arquivo de configuração precisa se chamar "virtualconf.json". Abaixo está um exemplo de configuração:
+The program uses an environment variable called "GAMEPAD_PROFILES". Its configuration file must be called "virtualconf.json". Below is an example of configuration:
 
+### virtualconf.json
+
+```json
 {
     "mouse" : "/dev/input/event7",
     "keyboard" : "/dev/input/event6",
@@ -41,4 +47,11 @@ O programa utiliza uma váriavel de ambiente chamada "GAMEPAD_PROFILES". Seu arq
     }
 }
 
-O arquivo precisa declarar mouse, que é o caminho para seu mouse em /dev/input. O mesmo vale para o teclado.
+```
+The file needs to declare mouse, which is the path to your mouse in /dev/input. The same goes for the keyboard. In events, the first value corresponds to the trigger, that is, the mouse/keyboard event. The value associated with the trigger is the Virtual Joystick event, in the following format:
+
+```
+{Value multiplier}|{Multiplication sign}|{Event}
+```
+
+To find out the valid events, visit the documentation of the [evdev](https://docs.rs/evdev-rs/latest/evdev_rs/enums/enum.EventCode.html) library for Rust.
