@@ -18,17 +18,16 @@ pub struct CustomEvent {
     pub sign: i32
 }
 
-pub fn start_env() -> (String, String) {
+pub fn start_env() -> String {
     dotenvy::dotenv().ok();
     let profiles_path = dotenvy::var("GAMEPAD_PROFILES").expect("Unable to read profiles dir");
-    let ev_abs = format!("{}/abs.json", &profiles_path);
-    let ev_key = format!("{}/keys.json", &profiles_path);
-    (ev_abs, ev_key)
+    let ev = format!("{}/virtualconf.json", &profiles_path);
+    ev
 }
 
 pub fn build() -> ((String, String), Vec<CustomEvent>) {
-    let (absf, _evf) = start_env();
-    build_events(read(absf))
+    let ev = start_env();
+    build_events(read(ev))
 }
 
 pub fn read_file(path: String) -> String {

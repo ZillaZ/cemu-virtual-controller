@@ -10,8 +10,15 @@ pub struct DeviceManager {
 
 impl DeviceManager {
     pub fn new(events: ((String, String), Vec<CustomEvent>)) -> Self {
+        let recent = std::fs::read_dir("/dev/input").unwrap();
+        let mut devices : Vec<i32> = recent
+            .filter(|x| x.as_ref().unwrap().file_name().into_string().unwrap().contains("event") )
+            .map(|x| x.unwrap().file_name().into_string().unwrap().replace("event", "").parse::<i32>().unwrap())
+            .collect();
+        devices.sort();
+        let virtual_dev_file = devices.pop().unwrap();
         let interface = Device::new_from_file(
-            File::open("/dev/input/event15").unwrap()
+            File::open(format!("/dev/input/event{}", virtual_dev_file)).unwrap()
         ).unwrap();
 
         let aux = EnableCodeData::AbsInfo(AbsInfo {
