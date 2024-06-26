@@ -1,6 +1,6 @@
-# CEMU Virtual Controller for Linux
+# Keyboard to Joystick
 
-This program creates a virtual controller that the CEMU emulator can understand.
+This program translates keyboard events to joystick events! It was made with the main purpose of emulating joystick movement with the mouse.
 
 ## Usage:
 
